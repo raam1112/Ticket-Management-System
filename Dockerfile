@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     libpq-dev \
-    libzip-dev
+    libzip-dev \
+    git
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
