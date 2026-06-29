@@ -33,8 +33,11 @@ class AgentStatusHistory extends Model
             if (!$agent) return;
 
             $teamLeads = User::byRole('team_lead')->active()->get();
-            foreach ($teamLeads as $lead) {
-                $lead->notify(new \App\Notifications\AgentStatusNotification($agent, $history->status));
+            $admins = User::byRole('admin')->active()->get();
+            $notifiables = $teamLeads->merge($admins);
+
+            foreach ($notifiables as $notifyUser) {
+                $notifyUser->notify(new \App\Notifications\AgentStatusNotification($agent, $history->status));
             }
         });
     }

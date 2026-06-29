@@ -172,6 +172,8 @@
         }, 60000); // Check every minute
     });
 
+    let lastNotifCount = {{ auth()->check() ? auth()->user()->unreadNotifications->count() : 0 }};
+
     function fetchLiveNotifications() {
         $.ajax({
             url: "{{ route('notifications.unread') }}",
@@ -179,6 +181,18 @@
             success: function(response) {
                 let count = response.count;
                 let badge = $('#alertsDropdown .badge-counter');
+                
+                if (count > lastNotifCount && response.notifications.length > 0) {
+                    let newNotif = response.notifications[0];
+                    if ($('#liveToast').length) {
+                        $('#liveToast .toast-body').html(newNotif.message);
+                        $('#liveToast .toast-time').text(newNotif.time);
+                        let toastElement = document.getElementById('liveToast');
+                        let toast = new bootstrap.Toast(toastElement);
+                        toast.show();
+                    }
+                }
+                lastNotifCount = count;
                 
                 if (count > 0) {
                     let displayCount = count > 9 ? '9+' : count;
