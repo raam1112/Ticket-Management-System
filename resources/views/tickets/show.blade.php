@@ -175,7 +175,7 @@
                     @if(auth()->user()->hasAnyRole(['admin','team_lead']) && in_array($ticket->status, ['open','assigned','in_progress','escalated']))
                         <form action="{{ route('tickets.assign', $ticket) }}" method="POST" class="mb-3">
                             @csrf
-                            <label class="form-label small font-weight-bold text-primary mb-2"><i class="fas fa-sitemap"></i> Smart Assignment Panel</label>
+                            <label class="form-label small font-weight-bold text-primary mb-2"><i class="fas fa-sitemap"></i> {{ $ticket->assigned_to ? 'Reassign Ticket' : 'Smart Assignment Panel' }}</label>
                             
                             <div class="list-group mb-3 shadow-sm border-0 rounded-3" style="max-height: 250px; overflow-y: auto;">
                                 @foreach($agents as $agent)
@@ -192,7 +192,7 @@
                                         $capacityBadge = $isFull ? '<span class="badge bg-danger rounded-pill ms-1" style="font-size: 0.6rem;">At Capacity</span>' : '';
                                     @endphp
                                     <label class="list-group-item list-group-item-action d-flex align-items-center p-2" style="cursor: pointer; transition: all 0.2s; border-left: 3px solid {{ $agent->availability_status === 'available' ? '#1cc88a' : '#f6c23e' }};">
-                                        <input class="form-check-input me-3" type="radio" name="agent_id" value="{{ $agent->id }}" required>
+                                        <input class="form-check-input me-3" type="radio" name="agent_id" value="{{ $agent->id }}" {{ $ticket->assigned_to == $agent->id ? 'checked' : '' }} required>
                                         <img src="{{ $agent->avatar_url }}" class="rounded-circle me-2 shadow-sm" width="36" height="36" style="border: 2px solid #fff;">
                                         <div class="flex-grow-1 min-w-0">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -208,7 +208,7 @@
                                 @endforeach
                             </div>
                             
-                            <button class="btn btn-sm btn-primary w-100 font-weight-bold shadow-sm rounded-pill"><i class="fas fa-paper-plane me-1"></i> Assign Ticket</button>
+                            <button class="btn btn-sm btn-primary w-100 font-weight-bold shadow-sm rounded-pill"><i class="fas fa-paper-plane me-1"></i> {{ $ticket->assigned_to ? 'Reassign Ticket' : 'Assign Ticket' }}</button>
                         </form>
                         <hr>
                     @endif
