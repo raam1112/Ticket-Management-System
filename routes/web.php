@@ -20,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
     // Root redirect based on role
     Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('home');
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/agent-availability', [App\Http\Controllers\DashboardController::class, 'agentAvailability'])->name('dashboard.agent-availability');
 
     // Logout
     Route::post('/logout', [App\Http\Controllers\Auth\AuthController::class, 'logout'])->name('logout');

@@ -78,6 +78,7 @@ class DashboardController extends Controller
         ];
 
         $recentEscalations = Ticket::where('escalation_count', '>', 0)
+            ->open()
             ->with(['category', 'priority', 'assignee'])
             ->latest()->take(5)->get();
 
@@ -148,5 +149,19 @@ class DashboardController extends Controller
         return view('dashboard.admin', compact(
             'stats', 'categoryStats', 'priorityStats', 'volumeTrend', 'topAgents', 'agentAvailability'
         ));
+    }
+
+    public function agentAvailability()
+    {
+        $agentAvailability = User::byRole('agent')
+            ->active()
+            ->with(['department'])
+            ->withCount(['assignedTickets as active_tickets_count' => function ($q) {
+                $q->whereNotIn('status', ['resolved', 'closed', 'cancelled']);
+            }])
+            ->get()
+            ->groupBy('availability_status');
+
+        return view('partials.agent_availability_grid', compact('agentAvailability'))->render();
     }
 }
