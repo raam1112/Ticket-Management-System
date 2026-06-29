@@ -24,6 +24,11 @@ Route::get('/failed-jobs', function () {
     return \Illuminate\Support\Facades\DB::table('failed_jobs')->latest('failed_at')->take(10)->get();
 });
 
+Route::get('/seed-kb', function () {
+    \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'KbArticleSeeder', '--force' => true]);
+    return 'Knowledge Base Seeded!';
+});
+
 Route::middleware(['auth'])->group(function () {
 
     // Root redirect based on role
