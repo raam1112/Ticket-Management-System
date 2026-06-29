@@ -15,6 +15,11 @@ Route::middleware('guest')->group(function () {
 });
 
 // ─── Authenticated routes ─────────────────────────────────────────────────────
+Route::get('/clear-queue', function () {
+    \Illuminate\Support\Facades\DB::table('jobs')->truncate();
+    return 'Queue cleared!';
+});
+
 Route::middleware(['auth'])->group(function () {
 
     // Root redirect based on role
