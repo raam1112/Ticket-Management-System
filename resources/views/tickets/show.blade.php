@@ -172,7 +172,7 @@
                         <hr>
                     @endif
 
-                    @if(auth()->user()->hasAnyRole(['admin','team_lead']) && in_array($ticket->status, ['open','assigned','in_progress','escalated']))
+                    @if(auth()->user()->hasAnyRole(['admin','team_lead']) && $ticket->status === 'open')
                         <form action="{{ route('tickets.assign', $ticket) }}" method="POST" class="mb-3">
                             @csrf
                             <label class="form-label small font-weight-bold text-primary mb-2"><i class="fas fa-sitemap"></i> {{ $ticket->assigned_to ? 'Reassign Ticket' : 'Smart Assignment Panel' }}</label>
