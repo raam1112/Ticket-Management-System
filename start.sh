@@ -8,5 +8,8 @@ php artisan view:cache
 # Run database migrations (creating tables in Supabase)
 php artisan migrate --force
 
+# Seed database with default data (idempotent, safe to run multiple times)
+php artisan db:seed --force
+
 # Start the Apache web server
 apache2-foreground
