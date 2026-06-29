@@ -20,6 +20,10 @@ Route::get('/clear-queue', function () {
     return 'Queue cleared!';
 });
 
+Route::get('/failed-jobs', function () {
+    return \Illuminate\Support\Facades\DB::table('failed_jobs')->latest('failed_at')->take(10)->get();
+});
+
 Route::middleware(['auth'])->group(function () {
 
     // Root redirect based on role
